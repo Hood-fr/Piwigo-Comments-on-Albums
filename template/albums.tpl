@@ -79,8 +79,10 @@ var coa_on_top = {intval(isset($COMMENTS_ON_TOP))}, coa_force_open = {intval(iss
           {/if}
         </p>
         <p><input type="hidden" name="key" value="{$comment_add.KEY}">
-          <input type="submit" value="{'Submit'|translate}"></p>
-      </form>
+          <input type="submit" value="{'Submit'|translate}">
+          <a href="{$comment_add.U_CANCEL}">{'Cancel'|@translate}</a>
+	</p>
+    </form>
     </div>
     {/if}
     {if isset($comments)}
