@@ -127,13 +127,26 @@ if ($category['commentable'] and isset($_POST['content']))
     die('Session expired');
   }
 
-  $comm = array(
-    'author' => trim( @$_POST['author'] ),
-    'content' => trim( $_POST['content'] ),
-    'website_url' => trim( $_POST['website_url'] ),
-    'email' => trim( @$_POST['email'] ),
-    'category_id' => $category['id'],
-   );
+if (isset($_POST['website_url']))
+     {
+        $comm = array(
+        'author' => trim( @$_POST['author'] ),
+        'content' => trim( $_POST['content'] ),
+        'website_url' => trim( $_POST['website_url'] ),
+        'email' => trim( @$_POST['email'] ),
+        'category_id' => $category['id'],
+        );
+    }
+    else
+     {
+        $comm = array(
+        'author' => trim( @$_POST['author'] ),
+        'content' => trim( $_POST['content'] ),
+        'website_url' => '',
+        'email' => trim( @$_POST['email'] ),
+        'category_id' => $category['id'],
+        );
+    }
 
   include_once(COA_PATH.'include/functions_comment.inc.php');
 
@@ -367,7 +380,7 @@ SELECT
         'EMAIL_MANDATORY' =>  $conf['comments_email_mandatory'],
         'EMAIL' =>            '',
         'SHOW_WEBSITE' =>     $conf['comments_enable_website'],
-        );
+    );
 
     if ('reject'==@$comment_action)
     {
