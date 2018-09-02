@@ -82,6 +82,16 @@ SELECT COUNT(*) AS user_exists
     $_POST['cr'][] = 'key';
   }
 
+  if (empty($comm['website_url']))//if the website field is empty, the content is scanned for urls. The first result is then used as a website url (useful for spam detection)
+  {
+          preg_match_all('#\bhttps?://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/))#', $comm['content'], $match);
+echo '<pre>';print_r($match);echo '</pre>';
+      if(!empty($match[0]))
+      {
+          $comm['website_url']=$match[0][0];
+      }
+  }
+
   // website
   if (!empty($comm['website_url']))
   {
@@ -310,7 +320,17 @@ function update_user_comment_albums($comment, $post_key)
       );
 
   // website
-  if (!empty($comment['website_url']))
+   if (empty($comm['website_url']))//if the website field is empty, the content is scanned for urls. The first result is then used as a website url (useful for spam detection)
+  {
+          preg_match_all('#\bhttps?://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/))#', $comm['content'], $match);
+echo '<pre>';print_r($match);echo '</pre>';
+      if(!empty($match[0]))
+      {
+          $comm['website_url']=$match[0][0];
+      }
+  }
+
+    if (!empty($comment['website_url']))
   {
     $comm['website_url'] = strip_tags($comm['website_url']);
     if (!preg_match('/^https?/i', $comment['website_url']))
