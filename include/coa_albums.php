@@ -264,13 +264,14 @@ SELECT
     com.website_url,
     com.email,
     com.content,
-    com.validated
+    com.validated,
+    com.spam_feedback
   FROM '.COA_TABLE.' AS com
   LEFT JOIN '.USERS_TABLE.' AS u
     ON u.'.$conf['user_fields']['id'].' = author_id
   WHERE category_id = '.$category['id'].'
     '.$validated_clause.'
-  ORDER BY date '.$comments_order.'
+  ORDER BY com.spam_feedback DESC, date '.$comments_order.'
   LIMIT '.$conf['nb_comment_page'].' OFFSET '.$page['start_comments'].'
 ;';
     $result = pwg_query($query);
@@ -299,6 +300,7 @@ SELECT
         'DATE' => format_date($row['date'], array('day_name','day','month','year','time')),
         'CONTENT' => trigger_change('render_comment_content', $row['content'], 'album'),
         'WEBSITE_URL' => $row['website_url'],
+        'IS_SPAM' => 'spam' == $row['spam_feedback'],
         );
 
       // rights

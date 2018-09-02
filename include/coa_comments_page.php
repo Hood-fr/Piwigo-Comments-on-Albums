@@ -218,7 +218,8 @@ SELECT
     com.date,
     com.website_url,
     com.content,
-    com.validated
+    com.validated,
+    com.spam_feedback
   FROM '.CATEGORIES_TABLE.' AS cat
     INNER JOIN '.COA_TABLE.' AS com
       ON cat.id = com.category_id
@@ -313,6 +314,8 @@ SELECT
       'WEBSITE_URL' => $comment['website_url'],
       'DATE' => format_date($comment['date'], true),
       'CONTENT' => trigger_change('render_comment_content', $comment['content'], 'album'),
+      'IS_PENDING' => ('false' == $comment['validated']),
+      'IS_SPAM' => ('spam' == $comment['spam_feedback']),
       );
 
     if (is_admin())

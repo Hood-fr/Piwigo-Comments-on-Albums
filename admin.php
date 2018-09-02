@@ -142,7 +142,8 @@ SELECT
     cat.name,
     img.id AS image_id,
     img.path,
-    com.validated
+    com.validated,
+    com.spam_feedback
   FROM '.COA_TABLE.' AS com
     LEFT JOIN '.CATEGORIES_TABLE.' AS cat
       ON cat.id = com.category_id
@@ -153,7 +154,7 @@ SELECT
     LEFT JOIN '.IMAGES_TABLE.' AS img
       ON img.id = ucc.user_representative_picture_id
   WHERE '.implode(' AND ', $where_clauses).'
-  ORDER BY com.date DESC
+  ORDER BY com.spam_feedback DESC, com.date DESC
   LIMIT '.$page['start'].', '.$conf['comments_page_nb_comments'].'
 ;';
 $result = pwg_query($query);
@@ -187,7 +188,8 @@ while ($row = pwg_db_fetch_assoc($result))
       'DATE' => format_date($row['date'], true),
       'CONTENT' => trigger_change('render_comment_content', $row['content'], 'album'),
       'IS_PENDING' => ('false' == $row['validated']),
-      )
+      'IS_SPAM' => ('spam' == $row['spam_feedback']),
+    )
     );
 }
 

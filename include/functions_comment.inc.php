@@ -155,9 +155,20 @@ SELECT count(1) FROM '.COA_TABLE.'
 
   if ($comment_action!='reject')
   {
-    $query = '
+      if (substr_compare($comment_action,'spam',strlen($comment_action)-4)==0)
+      {
+          $spam_feedback='spam';
+      }
+      else{
+          $spam_feedback='ham';
+      }
+
+echo 'feedback :'.$spam_feedback;
+
+
+      $query = '
 INSERT INTO '.COA_TABLE.'
-  (author, author_id, anonymous_id, content, date, validated, validation_date, category_id, website_url, email)
+  (author, author_id, anonymous_id, content, date, validated, validation_date, category_id, website_url, email, spam_feedback)
   VALUES (
     \''.$comm['author'].'\',
     '.$comm['author_id'].',
@@ -168,7 +179,8 @@ INSERT INTO '.COA_TABLE.'
     '.($comment_action=='validate' ? 'NOW()':'NULL').',
     '.$comm['category_id'].',
     '.(!empty($comm['website_url']) ? '\''.$comm['website_url'].'\'' : 'NULL').',
-    '.(!empty($comm['email']) ? '\''.$comm['email'].'\'' : 'NULL').'
+    '.(!empty($comm['email']) ? '\''.$comm['email'].'\'' : 'NULL').',
+    \''.($spam_feedback=='spam' ? 'spam':'ham').'\'
   )
 ';
     pwg_query($query);
@@ -201,6 +213,10 @@ INSERT INTO '.COA_TABLE.'
       );
     }
   }
+
+if ($comment_action == 'moderate-spam'){
+     $comment_action = 'moderate';
+ }
 
   return $comment_action;
 }
@@ -236,13 +252,15 @@ DELETE FROM '.COA_TABLE.'
 $user_where_clause.'
 ;';
 
+  trigger_notify('user_comment_deletion', $comment_id, 'album');// trigger is but before submitting the query in order to be able to submit spam to askimet plugin before removing the comment
+
   if (pwg_db_changes(pwg_query($query)))
   {
     email_admin('delete',
                 array('author' => $GLOBALS['user']['username'],
                       'comment_id' => $comment_id
                   ));
-    trigger_notify('user_comment_deletion', $comment_id, 'album');
+    //trigger_notify('user_comment_deletion', $comment_id, 'album'); INITIAL LOCATION OF TRIGGER
 
     return true;
   }
@@ -305,7 +323,17 @@ function update_user_comment_albums($comment, $post_key)
 
   if ( $comment_action!='reject' )
   {
-    $user_where_clause = '';
+      if (substr_compare($comment_action,'spam',strlen($comment_action)-4)==0)
+      {
+          $spam_feedback='spam';
+      }
+      else{
+          $spam_feedback='ham';
+      }
+
+    echo 'feedback :'.$spam_feedback;
+
+      $user_where_clause = '';
     if (!is_admin())
     {
       $user_where_clause = '   AND author_id = \''.
@@ -317,7 +345,8 @@ UPDATE '.COA_TABLE.'
   SET content = \''.$comment['content'].'\',
       website_url = '.(!empty($comment['website_url']) ? '\''.$comment['website_url'].'\'' : 'NULL').',
       validated = \''.($comment_action=='validate' ? 'true':'false').'\',
-      validation_date = '.($comment_action=='validate' ? 'NOW()':'NULL').'
+      validation_date = '.($comment_action=='validate' ? 'NOW()':'NULL').',
+      spam_feedback = \''.($spam_feedback=='spam' ? 'spam':'ham').'\',
   WHERE id = '.$comment['comment_id'].
 $user_where_clause.'
 ;';
@@ -351,6 +380,10 @@ $user_where_clause.'
         'content' => stripslashes($comment['content'])) );
     }
   }
+
+ if ($comment_action == 'moderate-spam'){
+     $comment_action = 'moderate';
+ }
 
   return $comment_action;
 }

@@ -109,7 +109,8 @@ SELECT com.id AS comment_id,
        com.author_id,
        com.date,
        com.content,
-       com.validated
+       com.validated,
+       com.spam_feedback
   FROM '.COA_TABLE.' AS com
     LEFT JOIN '.USERS_TABLE.' AS u
     ON u.'.$conf['user_fields']['id'].' = com.author_id
@@ -122,7 +123,7 @@ SELECT com.id AS comment_id,
        com.date,
        com.content,
        com.validated
-  ORDER BY date DESC
+  ORDER BY com.spam_feedback DESC, date DESC
   LIMIT 0, ' . $datas[0] . ';';
 
 $query.= '
@@ -214,6 +215,8 @@ SELECT
       'CONTENT'=> trigger_change('render_comment_content',$comment['content'], 'album'),
       'WIDTH' => $datas[3],
       'HEIGHT' => $datas[4],
+      'IS_PENDING' => ('false' == $comment['validated']),
+      'IS_SPAM' => ('spam' == $comment['spam_feedback']),
       );
 
     if ($datas[1] == 'on')
