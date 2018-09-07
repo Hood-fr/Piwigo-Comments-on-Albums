@@ -300,6 +300,7 @@ SELECT
         'DATE' => format_date($row['date'], array('day_name','day','month','year','time')),
         'CONTENT' => trigger_change('render_comment_content', $row['content'], 'album'),
         'WEBSITE_URL' => $row['website_url'],
+        'IS_PENDING' => ('false' == $row['validated']),
         'IS_SPAM' => 'spam' == $row['spam_feedback'],
         );
 
