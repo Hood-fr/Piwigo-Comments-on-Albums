@@ -383,8 +383,7 @@ $user_where_clause.'
 
       $comment_url = get_absolute_root_url().'comments.php?display_mode=albums&amp;comment_id='.$comment['comment_id'];
 
-      $keyargs_content = array
-      (
+      $keyargs_content = array(
         get_l10n_args('Author: %s', stripslashes($GLOBALS['user']['username']) ),
         get_l10n_args('Comment: %s', stripslashes($comment['content']) ),
         get_l10n_args('', ''),
