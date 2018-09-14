@@ -264,21 +264,27 @@ DELETE FROM '.COA_TABLE.'
 $user_where_clause.'
 ;';
 
-  trigger_notify('user_comment_deletion', $comment_id, 'album');// trigger is but before submitting the query in order to be able to submit spam to askimet plugin before removing the comment
-
   if (pwg_db_changes(pwg_query($query)))
   {
     email_admin('delete',
                 array('author' => $GLOBALS['user']['username'],
                       'comment_id' => $comment_id
                   ));
-    //trigger_notify('user_comment_deletion', $comment_id, 'album'); INITIAL LOCATION OF TRIGGER
+    trigger_notify('user_comment_deletion', $comment_id, 'album');
 
     return true;
   }
 
   return false;
 }
+
+function submit_spam_comment_albums($comment_id)
+{
+    trigger_notify('comment_spam_submission', $comment_id, 'album');
+    delete_user_comment_albums($comment_id);
+    return false;
+}
+
 
 /**
  * Tries to update a user comment

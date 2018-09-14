@@ -12,7 +12,7 @@ global $user, $conf;
 $comment_id = null;
 $action = null;
 
-$actions = array('delete_comment_album', 'validate_comment_album', 'edit_comment_album');
+$actions = array('delete_comment_album', 'submit_spam_comment_album', 'validate_comment_album', 'edit_comment_album');
 foreach ($actions as $loop_action)
 {
   if (isset($_GET[$loop_action]))
@@ -41,6 +41,11 @@ if (isset($action))
       $perform_redirect = true;
     }
 
+    if ('submit_spam' == $action)
+    {
+      submit_spam_comment_albums($comment_id);
+      $perform_redirect = true;
+    }
     if ('validate' == $action)
     {
       validate_user_comment_albums($comment_id);
@@ -232,6 +237,13 @@ SELECT
           $url,
           array(
             'delete_comment_album' => $comment['comment_id'],
+            'pwg_token' => get_pwg_token(),
+            )
+          );
+        $tpl_comment['U_SUBMITSPAM'] = add_url_params(
+          $url,
+          array(
+            'submit_spam_comment_album' => $comment['comment_id'],
             'pwg_token' => get_pwg_token(),
             )
           );
