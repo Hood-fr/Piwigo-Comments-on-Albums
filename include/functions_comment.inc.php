@@ -99,10 +99,14 @@ SELECT COUNT(*) AS user_exists
   }
   //if the website field is empty, the content is scanned for urls. The first result is then used as a website url (useful for spam detection)
   else{
+//      echo 'empty_url_basic_new';
       preg_match_all('#\bhttps?://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/))#', $comm['content'], $match);
+//     echo '<pre>';print_r($match);echo '</pre>';
       if(!empty($match[0]))
       {
           $comm['website_url']=$match[0][0];
+          $infos[] = l10n('URL not permitted in comments');
+          $comment_action='reject';
       }      
   }
   
@@ -341,10 +345,15 @@ function update_user_comment_albums($comment, $post_key)
   }
   //if the website field is empty, the content is scanned for urls. The first result is then used as a website url (useful for spam detection)
   else{
+//      echo 'empty_url_basic_new';
       preg_match_all('#\bhttps?://[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/))#', $comm['content'], $match);
+//     echo '<pre>';print_r($match);echo '</pre>';
+
       if(!empty($match[0]))
       {
           $comm['website_url']=$match[0][0];
+          $infos[] = l10n('URL not permitted in comments');
+          $comment_action='reject';
       }      
   }
   
