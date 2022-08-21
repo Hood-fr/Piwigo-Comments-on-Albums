@@ -1,11 +1,12 @@
 <?php
 /*
 Plugin Name: Comments on Albums
-Version: 2.4.0
+Version: 2.5.0
 Description: Activate comments on albums pages
 Plugin URI: http://piwigo.org/ext/extension_view.php?eid=512
 Author: Mistic
 Author URI: http://www.strangeplanet.fr
+Has Settings: false
 */
 
 defined('PHPWG_ROOT_PATH') or die('Hacking attempt!');
