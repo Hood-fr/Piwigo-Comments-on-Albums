@@ -193,7 +193,7 @@ INSERT INTO '.COA_TABLE.'
     '.(!empty($comm['website_url']) ? '\''.$comm['website_url'].'\'' : 'NULL').',
     '.(!empty($comm['email']) ? '\''.$comm['email'].'\'' : 'NULL').',
     \''.($spam_feedback=='spam' ? 'spam':'ham').'\',
-    \''.$comm['user_agent'].'\'
+    '.(!empty($comm['user_agent']) ? '\''.$comm['user_agent'].'\'' : 'NULL').'
   )
 ';
     pwg_query($query);

@@ -70,7 +70,7 @@ var coa_on_top = {intval(isset($COMMENTS_ON_TOP))}, coa_force_open = {intval(iss
         <p><textarea name="content" id="contentid" rows="5" cols="50">{$comment_add.CONTENT}</textarea></p>
         <p><input type="hidden" name="key" value="{$comment_add.KEY}">
           <input type="submit" value="{'Submit'|translate}">
-          <a href="{$comment_add.U_CANCEL}">{'Cancel'|@translate}</a>
+          <input type="reset" value="{'Cancel'|@translate}">
 	</p>
     </form>
     </div>
