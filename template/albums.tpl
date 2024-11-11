@@ -6,7 +6,7 @@
 #comments { margin:10px 0 0 0; padding: 2px 5px !important; position:relative; }
 #comments .commentElement { width:98%; }
 
-{if $COMMENTS_ON_TOP}
+{if isset($COMMENTS_ON_TOP) and $COMMENTS_ON_TOP}
 #comments { margin:0 0 10px 0; }
 {/if}
 
@@ -54,7 +54,6 @@ var coa_on_top = {intval(isset($COMMENTS_ON_TOP))}, coa_force_open = {intval(iss
       <h4>{'Add a comment'|translate}</h4>
       <form method="post" action="{$comment_add.F_ACTION}" id="addComment">
         {if $comment_add.SHOW_AUTHOR}
-         <p>{'Please register'|translate}</p>
           <p><label for="author">{'Author'|translate}{if $comment_add.AUTHOR_MANDATORY} ({'mandatory'|translate}){/if} :</label></p>
           <p><input type="text" name="author" id="author" value="{$comment_add.AUTHOR}"></p>
         {/if}
