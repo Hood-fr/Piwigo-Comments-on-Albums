@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Comments on Albums
-Version: 2.5.0
+Version: 14.a
 Description: Activate comments on albums pages
 Plugin URI: http://piwigo.org/ext/extension_view.php?eid=512
 Author: Mistic

@@ -53,19 +53,18 @@
 
         var y = jQuery(this).scrollTop();
 
-// if condition commented in order to avoid hovering of comment block above thumbnails
- /*       if (y >= comments_top_offset) {
+        if (y >= comments_top_offset) {
           comments_add.css({
             'position': 'absolute',
             'top': Math.min(y-comments.offset().top+10, comments.height()-comments_add.height())
           });
         }
-        else {*/
+        else {
           comments_add.css({
             'position': 'static',
             'top': 0
           });
-//        }
+        }
       });
 
       if (comments_add.is(":visible")) {

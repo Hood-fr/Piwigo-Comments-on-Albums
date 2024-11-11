@@ -109,8 +109,6 @@ if (isset($action))
       if (!empty($_POST['content']))
       {
         check_pwg_token();
-        if (!empty($_POST['website_url']))
-        {
         $comment_action = update_user_comment_albums(
           array(
             'comment_id' => $_GET['edit_albums'],
@@ -120,19 +118,7 @@ if (isset($action))
             ),
           $_POST['key']
           );
-       }
-        else
-        {
-        $comment_action = update_user_comment_albums(
-          array(
-            'comment_id' => $_GET['edit_albums'],
-            'category_id' => $_POST['image_id'],
-            'content' => $_POST['content'],
-            '' => @$_POST['website_url'],
-            ),
-          $_POST['key']
-          );
-        }
+
         switch ($comment_action)
         {
           case 'moderate':
